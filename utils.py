@@ -1,6 +1,16 @@
 import random
 import string
 
+# ===== Константы проекта =====
+
+# Базовый адрес сайта
+BASE_URL = "https://stellarburgers.education-services.ru/"
+
+# Тестовый пользователь для входа
+TEST_USER_EMAIL = "valentin_mikhanosha_sprint5@yandex.ru"
+TEST_USER_PASSWORD = "Qwerty123"
+
+# ===== Генераторы тестовых данных =====
 
 def generate_email():
     """Генерирует уникальный email в формате имя_фамилия_когорта_XXX@домен."""

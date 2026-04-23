@@ -1,11 +1,7 @@
 import pytest
 from selenium import webdriver
-from locators import BASE_URL
 
-# Тестовый пользователь для входа
-TEST_USER_EMAIL = "valentin_mikhanosha_sprint5@yandex.ru"
-TEST_USER_PASSWORD = "Qwerty123"
-
+from utils import BASE_URL, TEST_USER_EMAIL, TEST_USER_PASSWORD
 
 @pytest.fixture
 def driver():

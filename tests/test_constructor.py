@@ -1,71 +1,43 @@
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-
-from locators import (
-    MAIN_LOGIN_BUTTON,
-    LOGIN_EMAIL_INPUT,
-    LOGIN_PASSWORD_INPUT,
-    LOGIN_SUBMIT_BUTTON,
-    MAKE_ORDER_BUTTON,
-    BUNS_TAB,
-    SAUCES_TAB,
-    FILLINGS_TAB,
-    ACTIVE_TAB,
+from helpers import (
+    login_and_go_to_constructor,
+    go_to_sauces_tab,
+    go_to_buns_tab,
+    go_to_fillings_tab,
+    get_active_tab_text,
 )
-from conftest import TEST_USER_EMAIL, TEST_USER_PASSWORD
-
-def login_and_go_to_constructor(driver):
-    # вспомогательная функция внутри файла, не тест
-    WebDriverWait(driver, 10).until(
-        EC.element_to_be_clickable(MAIN_LOGIN_BUTTON)
-    ).click()
-
-    WebDriverWait(driver, 10).until(
-        EC.visibility_of_element_located(LOGIN_EMAIL_INPUT)
-    ).send_keys(TEST_USER_EMAIL)
-
-    driver.find_element(*LOGIN_PASSWORD_INPUT).send_keys(TEST_USER_PASSWORD)
-    driver.find_element(*LOGIN_SUBMIT_BUTTON).click()
-
-    WebDriverWait(driver, 10).until(
-        EC.visibility_of_element_located(MAKE_ORDER_BUTTON)
-    )
 
 
 def test_constructor_buns_tab(driver):
-    # Просто зайти в конструктор (булки должны быть активны по умолчанию)
+    # 1. Авторизуемся и попадаем в конструктор
     login_and_go_to_constructor(driver)
 
-    active_text = WebDriverWait(driver, 10).until(
-        EC.visibility_of_element_located(ACTIVE_TAB)
-    ).text
+    # 2. Уходим с булок на соусы (чтобы потом проверить возврат)
+    go_to_sauces_tab(driver)
 
-    assert active_text == "Булки"
+    # 3. Возвращаемся на вкладку "Булки"
+    go_to_buns_tab(driver)
+
+    # 4. Проверяем, что активная вкладка — "Булки"
+    assert get_active_tab_text(driver) == "Булки"
 
 
 def test_constructor_sauces_tab(driver):
+    # 1. Авторизуемся и попадаем в конструктор
     login_and_go_to_constructor(driver)
 
-    WebDriverWait(driver, 10).until(
-        EC.element_to_be_clickable(SAUCES_TAB)
-    ).click()
+    # 2. Переходим на вкладку "Соусы"
+    go_to_sauces_tab(driver)
 
-    active_text = WebDriverWait(driver, 10).until(
-        EC.visibility_of_element_located(ACTIVE_TAB)
-    ).text
-
-    assert active_text == "Соусы"
+    # 3. Проверяем, что активная вкладка — "Соусы"
+    assert get_active_tab_text(driver) == "Соусы"
 
 
 def test_constructor_fillings_tab(driver):
+    # 1. Авторизуемся и попадаем в конструктор
     login_and_go_to_constructor(driver)
 
-    WebDriverWait(driver, 10).until(
-        EC.element_to_be_clickable(FILLINGS_TAB)
-    ).click()
+    # 2. Переходим на вкладку "Начинки"
+    go_to_fillings_tab(driver)
 
-    active_text = WebDriverWait(driver, 10).until(
-        EC.visibility_of_element_located(ACTIVE_TAB)
-    ).text
-
-    assert active_text == "Начинки"
+    # 3. Проверяем, что активная вкладка — "Начинки"
+    assert get_active_tab_text(driver) == "Начинки"

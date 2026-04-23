@@ -1,8 +1,5 @@
 from selenium.webdriver.common.by import By
 
-# Базовый адрес сайта
-BASE_URL = "https://stellarburgers.education-services.ru/"
-
 # Кнопка "Войти в аккаунт" на главной
 MAIN_LOGIN_BUTTON = (By.XPATH, "//button[text()='Войти в аккаунт']")
 
