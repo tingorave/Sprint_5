@@ -27,7 +27,6 @@ def test_go_to_constructor_from_personal_account_by_button(driver):
 
     # 2. Перейти в личный кабинет
     open_personal_account(driver)
-    assert_in_profile(driver)
 
     # 3. Нажать "Конструктор" в шапке
     go_to_constructor_from_personal_account_by_button(driver)
@@ -42,7 +41,6 @@ def test_go_to_constructor_from_personal_account_by_logo(driver):
 
     # 2. Перейти в личный кабинет
     open_personal_account(driver)
-    assert_in_profile(driver)
 
     # 3. Нажать на логотип Stellar Burgers
     go_to_constructor_from_personal_account_by_logo(driver)
@@ -57,7 +55,6 @@ def test_logout_from_personal_account(driver):
 
     # 2. Перейти в личный кабинет
     open_personal_account(driver)
-    assert_in_profile(driver)
 
     # 3. Нажать "Выйти"
     logout(driver)

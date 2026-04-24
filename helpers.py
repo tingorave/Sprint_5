@@ -14,6 +14,12 @@ from locators import (
     REGISTER_PAGE_LOGIN_LINK,
     FORGOT_PASSWORD_LINK,
     FORGOT_PASSWORD_PAGE_LOGIN_LINK,
+    # регистрация
+    NAME_INPUT,
+    EMAIL_INPUT,
+    PASSWORD_INPUT,
+    REGISTER_SUBMIT,
+    REGISTER_ERROR_MESSAGE,
     # конструктор и личный кабинет
     BUNS_TAB,
     SAUCES_TAB,
@@ -77,10 +83,9 @@ def fill_login_form_and_submit(driver):
 
 def assert_user_logged_in(driver):
     """Проверить, что пользователь залогинен: видна кнопка 'Оформить заказ'."""
-    make_order_button = WebDriverWait(driver, 10).until(
+    assert WebDriverWait(driver, 10).until(
         EC.visibility_of_element_located(MAKE_ORDER_BUTTON)
-    )
-    assert make_order_button.is_displayed()
+    ).is_displayed()
 
 
 def login(driver):
@@ -93,6 +98,46 @@ def login(driver):
 def login_and_go_to_constructor(driver):
     """Авторизоваться и попасть в конструктор (главная страница после логина)."""
     login(driver)
+
+
+# ===== Хелперы для регистрации =====
+
+def open_registration_page(driver):
+    """Открыть страницу регистрации через форму логина с главной."""
+    WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable(MAIN_LOGIN_BUTTON)
+    ).click()
+    WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable(REGISTER_LINK)
+    ).click()
+
+
+def fill_registration_form(driver, name: str, email: str, password: str):
+    """Заполнить форму регистрации заданными данными."""
+    WebDriverWait(driver, 10).until(
+        EC.visibility_of_element_located(NAME_INPUT)
+    ).send_keys(name)
+    driver.find_element(*EMAIL_INPUT).send_keys(email)
+    driver.find_element(*PASSWORD_INPUT).send_keys(password)
+
+
+def submit_registration_form(driver):
+    """Отправить форму регистрации."""
+    driver.find_element(*REGISTER_SUBMIT).click()
+
+
+def assert_on_login_page_after_registration(driver):
+    """Проверить, что после регистрации открылась страница входа."""
+    assert WebDriverWait(driver, 10).until(
+        EC.visibility_of_element_located(LOGIN_HEADER)
+    ).is_displayed()
+
+
+def assert_registration_error_message_visible(driver):
+    """Проверить, что появилось сообщение об ошибке регистрации."""
+    assert WebDriverWait(driver, 10).until(
+        EC.visibility_of_element_located(REGISTER_ERROR_MESSAGE)
+    ).is_displayed()
 
 
 # ===== Хелперы для конструктора =====
@@ -129,10 +174,9 @@ def go_to_fillings_tab(driver):
 
 def get_active_tab_text(driver):
     """Вернуть текст активной вкладки конструктора."""
-    element = WebDriverWait(driver, 10).until(
+    return WebDriverWait(driver, 10).until(
         EC.visibility_of_element_located(ACTIVE_TAB)
-    )
-    return element.text
+    ).text
 
 
 # ===== Хелперы для личного кабинета =====
@@ -146,10 +190,9 @@ def open_personal_account(driver):
 
 def assert_in_profile(driver):
     """Проверить, что мы в личном кабинете (вкладка 'Профиль')."""
-    profile_tab = WebDriverWait(driver, 10).until(
+    assert WebDriverWait(driver, 10).until(
         EC.visibility_of_element_located(PROFILE_TAB)
-    )
-    assert profile_tab.is_displayed()
+    ).is_displayed()
 
 
 def go_to_constructor_from_personal_account_by_button(driver):
@@ -168,10 +211,9 @@ def go_to_constructor_from_personal_account_by_logo(driver):
 
 def assert_in_constructor(driver):
     """Проверить, что мы в конструкторе (видим 'Оформить заказ')."""
-    make_order_button = WebDriverWait(driver, 10).until(
+    assert WebDriverWait(driver, 10).until(
         EC.visibility_of_element_located(MAKE_ORDER_BUTTON)
-    )
-    assert make_order_button.is_displayed()
+    ).is_displayed()
 
 
 def logout(driver):
@@ -183,7 +225,6 @@ def logout(driver):
 
 def assert_on_login_page(driver):
     """Проверить, что мы на странице входа (заголовок 'Вход')."""
-    login_header = WebDriverWait(driver, 10).until(
+    assert WebDriverWait(driver, 10).until(
         EC.visibility_of_element_located(LOGIN_HEADER)
-    )
-    assert login_header.is_displayed()
+    ).is_displayed()
